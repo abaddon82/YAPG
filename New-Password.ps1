@@ -247,7 +247,7 @@ Function New-Password {
     }
 
     Function Set-RandomCase ([String] $Character) {
-        $Result = 0..1 | Get-Random
+        $Result = 0..1 | Get-SecureRandom
 
         if ($Result -eq 0) {
             return $Character.ToLower()
@@ -278,7 +278,7 @@ Function New-Password {
                     if ($TemplateString.Length - 1 -ne $c) {
                         $Pool = Get-Pool $TemplateString[$c + 1]
                         do {
-                            $PasswordChar = ($Pool | Get-Random).ToLower()
+                            $PasswordChar = ($Pool | Get-SecureRandom).ToLower()
                         } while (!(Approve $PasswordChar))
 
                         $TemplatePassword += $PasswordChar
@@ -293,7 +293,7 @@ Function New-Password {
                     if ($TemplateString.Length - 1 -ne $c) {
                         $Pool = Get-Pool $TemplateString[$c + 1]
                         do {
-                            $PasswordChar = ($Pool | Get-Random).ToUpper()
+                            $PasswordChar = ($Pool | Get-SecureRandom).ToUpper()
                         } while (!(Approve $PasswordChar))
 
                         $TemplatePassword += $PasswordChar
@@ -307,7 +307,7 @@ Function New-Password {
                 {'*', 'a', 'l', 'c', 'v', 'd', '!', 'h', 'b', 'o' -ccontains $_} {
                     $Pool = Get-Pool $TemplateString[$c]
                     do {
-                        $PasswordChar = Set-RandomCase ($Pool | Get-Random)
+                        $PasswordChar = Set-RandomCase ($Pool | Get-SecureRandom)
                     } while (!(Approve $PasswordChar))
 
                     $TemplatePassword += $PasswordChar
@@ -380,10 +380,10 @@ Function New-Password {
         if ($Variations -gt 0) {
             if ($Mode -eq "TotalMode" -or $CustomPattern -ne "") {
                 for ($i = 0; $i -lt $Length;$i++) {
-                    $index = Get-Random -Minimum 0 -Maximum $TotalAlphabet.Length
+                    $index = Get-SecureRandom -Minimum 0 -Maximum $TotalAlphabet.Length
 
                     while (!(Approve $TotalAlphabet[$index])) {
-                            $index = Get-Random -Minimum 0 -Maximum $TotalAlphabet.Length
+                            $index = Get-SecureRandom -Minimum 0 -Maximum $TotalAlphabet.Length
                     }
                     Count $TotalAlphabet[$index]
                     $Password = $Password + $TotalAlphabet[$index]
@@ -393,14 +393,14 @@ Function New-Password {
                     $variation = $null
 
                     if ($Variations -gt 1) {
-                        $variation = Get-Random -Minimum 0 -Maximum $Variations
+                        $variation = Get-SecureRandom -Minimum 0 -Maximum $Variations
                     } else {
                         $variation = 0
                     }
-                    $index = Get-Random -Minimum 0 -Maximum $TotalAlphabet[$variation].Length
+                    $index = Get-SecureRandom -Minimum 0 -Maximum $TotalAlphabet[$variation].Length
         
                     while (!(Approve $TotalAlphabet[$variation][$index])) {
-                        $index = Get-Random -Minimum 0 -Maximum $TotalAlphabet[$variation].Length
+                        $index = Get-SecureRandom -Minimum 0 -Maximum $TotalAlphabet[$variation].Length
                     }
                     Count $TotalAlphabet[$variation][$index]
                     $Password += $TotalAlphabet[$variation][$index]
